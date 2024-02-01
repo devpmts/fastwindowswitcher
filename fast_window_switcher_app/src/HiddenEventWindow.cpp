@@ -18,15 +18,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.If not, see < http://www.gnu.org/licenses/>.
 
-Dieses Programm ist Freie Software : Sie können es unter den Bedingungen
+Dieses Programm ist Freie Software : Sie kÃ¶nnen es unter den Bedingungen
 der GNU General Public License, wie von der Free Software Foundation,
 Version 3 der Lizenz oder(nach Ihrer Wahl) jeder neueren
-veröffentlichten Version, weiterverbreiten und / oder modifizieren.
+verÃ¶ffentlichten Version, weiterverbreiten und / oder modifizieren.
 
-Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
-OHNE JEDE GEWÄHRLEISTUNG, bereitgestellt; sogar ohne die implizite
-Gewährleistung der MARKTFÄHIGKEIT oder EIGNUNG FÜR EINEN BESTIMMTEN ZWECK.
-Siehe die GNU General Public License für weitere Details.
+Dieses Programm wird in der Hoffnung, dass es nÃ¼tzlich sein wird, aber
+OHNE JEDE GEWÃ„HRLEISTUNG, bereitgestellt; sogar ohne die implizite
+GewÃ¤hrleistung der MARKTFÃ„HIGKEIT oder EIGNUNG FÃœR EINEN BESTIMMTEN ZWECK.
+Siehe die GNU General Public License fÃ¼r weitere Details.
 
 Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 Programm erhalten haben.Wenn nicht, siehe < http://www.gnu.org/licenses/>.
@@ -105,7 +105,18 @@ namespace FastWindowSwitcher
 
   void HiddenEventWindow::BringToTop()
   {
-	FastWindowSwitcherLib::WinApiFunctions::Win32SetForegroundWindow(winId());
+	HWND hwnd = (HWND)winId();
+	FastWindowSwitcherLib::WinApiFunctions::Win32SetForegroundWindow(hwnd);
+	RECT rect;
+	if (GetWindowRect(hwnd, &rect))
+        {
+            // Calculate the center point
+            int centerX = (rect.left + rect.right) / 2;
+            int centerY = (rect.top + rect.bottom) / 2;
+
+            // Set the cursor position to the center
+            SetCursorPos(centerX, centerY);
+        }
   }
 
   void HiddenEventWindow::keyPressEvent(QKeyEvent* p_event)
